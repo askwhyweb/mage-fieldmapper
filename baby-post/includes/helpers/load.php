@@ -9,7 +9,7 @@ class load{
     }
 
     protected function model($modelName, $alternativeName = ''){
-        $model = $controllerFile = APP_PATH . '/includes/models/' . $modelName . '.php';
+        $model = APP_PATH . '/includes/models/' . $modelName . '.php';
         if(file_exists($model)){
             if($alternativeName == ''){
                 $alternativeName = $modelName;
@@ -20,20 +20,43 @@ class load{
             $_model = new $modelName();
             $this->$alternativeName = $_model;
             return $this;
-        }else{
-            echo "Sorry $modelName model not found...!";
         }
+        echo "Sorry $modelName model not found...!";
     }
 
     protected function view($viewName, $data = array()){
-
+        $view = APP_PATH . '/includes/views/' . $viewName . '.php';
+        if(file_exists($view)){
+            explode($data);
+            require_once($view);
+            return $this;
+        }
+        echo "Sorry, $viewName view not found...!";
     }
 
     protected function library($libraryName){
-
+        $library = APP_PATH . '/includes/lib/' . $libraryName . '.php';
+        if (file_exists($library)) {
+            if (isset($this->$libraryName)) {
+                return $this->$libraryName;
+            }
+            $_library = new $libraryName();
+            $this->$libraryName = $_library;
+            return $this;
+        }
+        echo "Sorry $libraryName library not found...!";
     }
 
     protected function helper($helperName){
-
+        $helper = APP_PATH . '/includes/helpers/' . $helperName . '.php';
+        if (file_exists($helper)) {
+            if (isset($this->$helperName)) {
+                return $this->$helperName;
+            }
+            $helper = new $helperName();
+            $this->$helperName = $helper;
+            return $this;
+        }
+        echo "Sorry $helperName helper not found...!";
     }
 }

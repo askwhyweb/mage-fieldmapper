@@ -5,7 +5,7 @@ class database extends config{
 	private $host,$db,$user,$pass, $getFrom;
     public $pdo;
     private $where1, $where2, $selection;
-    function __construct($getFrom = 'magento'){
+    function __construct($getFrom = 'local'){
         $this->getFrom = $getFrom;
         parent::__construct();
         if($getFrom == 'magento'):
@@ -34,7 +34,7 @@ class database extends config{
         try {
             $this->pdo[$getFrom] = new PDO($dsn, $this->user, $this->pass, $options);
         } catch (\PDOException $e) {
-            throw new \PDOException($e->getMessage(), (int)$e->getCode());
+            throw new \PDOException($dsn .': '. $this->user.' : ' . $this->pass . $e->getMessage(), (int)$e->getCode());
         }
     }
 
@@ -67,10 +67,11 @@ class database extends config{
         $this->selection = '*';
         return $this;
     }
-
+/**
     function __destruct(){ // lets close each connection.
         foreach($this->pdo as $key => $val){
             $this->pdo[$key] = null;
         }
     }
+/** */
 }

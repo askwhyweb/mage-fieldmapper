@@ -1,12 +1,11 @@
 <?php
 if(!defined('debug'))
     die("Direct calling of any script is strictly prohabited.");
-$time_start = microtime(true); 
-session_start();
 /**
  *	@author:	Farhan Islam <farhan@orvisoft.com>
  *	@script:	Magento 1 interconnection for inventory update.
  **/
+$time_start = microtime(true); 
 $paths = array(
     APP_PATH .'/includes/lib/',
     APP_PATH .'/includes/controllers/',
@@ -24,8 +23,9 @@ spl_autoload_register();
 
 $system = new application();
 $system->init();
-$time_end = microtime(true);
-$execution_time = ($time_end - $time_start); // see seconds.
-if(debug){
+
+if(debug){ // This will calculate the page execution time.
+    $time_end = microtime(true);
+    $execution_time = ($time_end - $time_start); // see seconds.
     echo '<hr /><b>Total Script Execution Time:</b> '.number_format((float) $execution_time, 4) .' Seconds';
 }

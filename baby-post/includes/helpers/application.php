@@ -4,10 +4,13 @@ if(!defined('debug'))
 class application extends load{
     public $magento, $local;
     function __construct(){
+        /**
         $this->magento = new database('magento'); // will initiate the config for database and so.
+        /* */
         $this->local = new database('local');
         $this->local->setDb('local',['user'	=> dbuser,'pass' => dbpass, 'host'	=> 	dbhost, 'db' => dbdatabase, 'prefix'=>dbprefix])->init();
-        return parent::__construct();
+        parent::__construct();
+        $this->load->helper('authorize');
     }
 
     function getDatabase($databaseType = ''){
@@ -24,13 +27,20 @@ class application extends load{
         return $alternative;
     }
 
+    function getPost($key, $alternative = false) {
+        if (isset($_POST[$key])) {
+            return $_POST[$key];
+        }
+        return $alternative;
+    }
+
     function init(){
         // Detect local URL and execute its function.
         self::decideWhichControllerAndAction();
         
     }
 
-    function getBaseUrl() {
+    function getBaseUrl($path = '') {
         // output: /myproject/index.php
         $currentPath = $_SERVER['PHP_SELF']; 
         
@@ -44,7 +54,7 @@ class application extends load{
         $protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,5))=='https://'?'https://':'http://';
         
         // return: http://localhost/myproject/
-        return $protocol.$hostName.$pathInfo['dirname']."/";
+        return $protocol.$hostName.$pathInfo['dirname']."/". $path;
     }
 
     function decideWhichControllerAndAction(){
@@ -73,6 +83,21 @@ class application extends load{
         return $_controller->$action();
     }
 
-    
+    function redirect($url){
+        $finalUrl = $this->getBaseUrl($url.'.html');
+        header("location: $finalUrl");
+    }
+
+    function generateRandomString($length = 10)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
 
 }

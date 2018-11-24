@@ -8,8 +8,8 @@ define('APP_PATH', __DIR__);
  **/
 define('dbhost', 'localhost');
 define('dbdatabase', 'baby_post');
-define('dbuser', 'root');
-define('dbpass', '');
+define('dbuser', 'baby');
+define('dbpass', '03004884454');
 define('dbprefix', ''); // leave this empty.
 define('router', ['/' => ['controller'=>'index', 'action' =>'index'], '404' => ['controller'=>'index', 'action' =>'notfound']]);
 define('debug', true);
